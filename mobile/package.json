@@ -16,7 +16,7 @@
     "@expo-google-fonts/abeezee": "^0.4.1",
     "@expo-google-fonts/kalam": "^0.4.1",
     "@expo-google-fonts/patrick-hand": "^0.4.1",
-    "@expo/metro-runtime": "~4.1.0",
+    "@expo/metro-runtime": "~57.0.0",
     "@expo/vector-icons": "^15.0.2",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/datetimepicker": "9.1.0",
@@ -37,7 +37,7 @@
     "react-native": "0.86.0",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-url-polyfill": "^2.0.0",
-    "react-native-web": "~0.20.1"
+    "react-native-web": "^0.20.0"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
