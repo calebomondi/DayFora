@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "DayFora",
+    "slug": "dayfora",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "package": "com.dayfora.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "splash": {
+      "image": "./assets/dayfora.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#4cae63"
+    },
+    "plugins": [
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow DayFora to record a voice note.",
+          "enableBackgroundRecording": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow DayFora to attach a photo you select."
+        }
+      ],
+      "expo-notifications",
+      "@react-native-community/datetimepicker",
+      "expo-status-bar"
+    ]
+  }
+}

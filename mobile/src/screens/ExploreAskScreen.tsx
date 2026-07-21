@@ -1,0 +1,20 @@
+import { useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Search } from 'lucide-react-native';
+import type { Session } from '@supabase/supabase-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { PrimaryButton, ScreenHeader, ScreenSection, TintedLeadingDisc, colors } from '../components/ui';
+import { askDiary } from '../lib/api';
+import type { DiaryAskResponse } from '../lib/types';
+
+export function ExploreAskScreen({ session, onBack, onOpenDiary }: { session: Session; onBack: () => void; onOpenDiary: (entryId: string) => void }) {
+  const [query, setQuery] = useState('');
+  const [answer, setAnswer] = useState<DiaryAskResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const insets = useSafeAreaInsets();
+  async function ask(question = query) { if (!question.trim()) return; setLoading(true); setError(null); try { setAnswer(await askDiary(session, question.trim())); } catch { setAnswer(null); setError('No saved written entries matched that question yet.'); } finally { setLoading(false); } }
+  return <ScrollView contentContainerStyle={[styles.content,{paddingTop:insets.top+12}]} keyboardShouldPersistTaps="handled"><ScreenHeader eyebrow="Private memory guide" title="Ask your diary" onBack={onBack}/><View style={styles.inputWrap}><Search color={colors.slate} size={20}/><TextInput accessibilityLabel="Ask your diary" multiline onChangeText={setQuery} placeholder="What would you like to revisit?" placeholderTextColor={colors.slate} style={styles.input} value={query}/></View><PrimaryButton disabled={!query.trim()||loading} onPress={()=>void ask()} tone="leaf">{loading?'Looking through matching moments…':'Ask'}</PrimaryButton>{!answer&&!error?<ScreenSection title="A few ways to begin"><View>{['What did I say about Build Week?','What happened last month?','Show happy days this week.'].map(question=><Pressable accessibilityRole="button" key={question} onPress={()=>{setQuery(question);void ask(question)}} style={styles.question}><Text style={styles.questionText}>{question}</Text><Text style={styles.chevron}>›</Text></Pressable>)}</View></ScreenSection>:null}{error?<Text style={styles.error}>{error}</Text>:null}{answer?<><ScreenSection title="A temporary answer"><Text style={styles.answer}>{answer.answer}</Text><Text style={styles.meta}>{answer.source_count} saved moments · {answer.date_from}–{answer.date_to}</Text>{answer.reflection_prompt?<Text style={styles.prompt}>{answer.reflection_prompt}</Text>:null}</ScreenSection><ScreenSection title="Source moments"><View>{answer.sources.map(source=><Pressable accessibilityRole="button" key={source.entry_id} onPress={()=>onOpenDiary(source.entry_id)} style={styles.source}><TintedLeadingDisc label="Diary source" symbol="✦" tone="diary"/><View style={styles.sourceCopy}><Text style={styles.questionText}>{source.title}</Text>{source.excerpt?<Text numberOfLines={2} style={styles.meta}>{source.excerpt}</Text>:null}</View><Text style={styles.chevron}>›</Text></Pressable>)}</View></ScreenSection></>:null}</ScrollView>;
+}
+const styles=StyleSheet.create({content:{backgroundColor:colors.canvas,flexGrow:1,gap:16,padding:24,paddingBottom:40},inputWrap:{alignItems:'flex-start',backgroundColor:colors.paper,borderRadius:18,flexDirection:'row',gap:10,minHeight:90,padding:14},input:{color:colors.ink,flex:1,fontSize:17,lineHeight:23,minHeight:60,textAlignVertical:'top'},question:{alignItems:'center',flexDirection:'row',justifyContent:'space-between',minHeight:54,paddingHorizontal:16},questionText:{color:colors.ink,fontSize:16,fontWeight:'600'},chevron:{color:colors.slate,fontSize:28},answer:{color:colors.ink,fontSize:17,lineHeight:25,padding:16},meta:{color:colors.slate,fontSize:14,lineHeight:20,paddingHorizontal:16},prompt:{color:colors.slate,fontSize:15,fontStyle:'italic',padding:16},error:{color:'#C94850',fontSize:15},source:{alignItems:'center',flexDirection:'row',gap:12,minHeight:76,padding:16},sourceCopy:{flex:1,gap:4}});

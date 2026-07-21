@@ -1,0 +1,22 @@
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+backend/.venv/
+
+# Expo / Node.js
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/.eslintcache
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.vscode/
