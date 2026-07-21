@@ -24,7 +24,19 @@ services:
         sync: false
       - key: SUPABASE_ANON_KEY
         sync: false
-      - key: OPENAI_API_KEY
+      - key: GROQ_API_KEY
+        sync: false
+      - key: LANGGRAPH_DATABASE_URL
+        sync: false
+      - key: LANGGRAPH_SUPABASE_POOLER_HOST
+        sync: false
+      - key: LANGGRAPH_SUPABASE_POOLER_PORT
+        value: "5432"
+      - key: DAYFORA_JOB_TOKEN
         sync: false
       - key: DAYFORA_SEMANTIC_SEARCH
         value: "1"
+      - key: DAYFORA_EMBEDDING_FUNCTION
+        value: "embed-diary-text"
+      - key: DAYFORA_ENV
+        value: "production"
